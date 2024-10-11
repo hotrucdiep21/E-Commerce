@@ -9,14 +9,11 @@ import { Toaster } from 'react-hot-toast'
 import { useUserStore } from './stores/useUserStore.js'
 import { useEffect } from 'react'
 function App() {
-  const {user, checkAuth, checkingAuth} = useUserStore();
-
-  // if (checkingAuth) return <LoadingSpinner />
-
+  const { user, checkAuth, checkingAuth } = useUserStore();
   useEffect(() => {
     checkAuth();
-  }, [checkAuth])
-
+  }, [])
+  if (checkingAuth) return <LoadingSpinner />
   return (
     <div className='min-h-screen bg-gray-900 relative overflow-hidden'>
       {/* Background gradient */}
@@ -29,8 +26,8 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={!user? <SignUpPage />: <Navigate to="/" />} />
-          <Route path="/login" element={!user ? <LoginPage />: <Navigate to="/" />} />
+          <Route path="/signup" element={!user ? <SignUpPage /> : <Navigate to="/" />} />
+          <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
         </Routes>
         <Toaster />
       </div>
