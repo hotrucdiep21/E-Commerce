@@ -17,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cookieParser())
-app.use(express.json()) //allow json data to be sent to the server
+app.use(express.json({limit: "10mb"})) //allow json data to be sent to the server
 app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);

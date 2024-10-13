@@ -3,12 +3,12 @@ import { redis } from "../lib/redis.js";
 import Product from "../model/product.model.js";
 export const getAllProducts = async (req, res) => {
     try {
-        const allProducts = await Product.find({});
-        res.status(200).json({ allProducts });
-    } catch (error) {
-        console.log("Error getting products ", error.message);
-        res.status(500).json({ error: error.message });
-    }
+		const products = await Product.find({}); // find all products
+		res.json({ products });
+	} catch (error) {
+		console.log("Error in getAllProducts controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
 }
 
 export const getFeaturedProducts = async (req, res) => {
@@ -39,9 +39,8 @@ export const getFeaturedProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
     try {
         const { name, description, price, image, category } = req.body;
-        if (!name || !description || !price || !image || !category) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
+        console.log("Product controller:",name, description, price, image, category);
+
         let cloudinaryResponse = null;
 
         if (image) {
@@ -68,28 +67,29 @@ export const createProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.params.id);
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
+		const product = await Product.findById(req.params.id);
 
-        if (product.image) {
-            const publicId = product.image.split("/").pop().split(".")[0]; //get id of the image
-            try {
-                await cloudinary.uploader.destroy(publicId);
-                console.log("Image deleted from cloudinary");
-            } catch (error) {
-                console.log("Error deleting image from cloudinary", error.message);
-            }
-        }
+		if (!product) {
+			return res.status(404).json({ message: "Product not found" });
+		}
 
-        await product.findByIdAndDelete(req.params.id);
+		if (product.image) {
+			const publicId = product.image.split("/").pop().split(".")[0];
+			try {
+				await cloudinary.uploader.destroy(`products/${publicId}`);
+				console.log("deleted image from cloduinary");
+			} catch (error) {
+				console.log("error deleting image from cloduinary", error);
+			}
+		}
 
-        res.status(200).json({ message: "Product deleted successfully" });
-    } catch (error) {
-        console.log("Error deleting product ", error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
-    }
+		await Product.findByIdAndDelete(req.params.id);
+
+		res.json({ message: "Product deleted successfully" });
+	} catch (error) {
+		console.log("Error in deleteProduct controller", error.message);
+		res.status(500).json({ message: "Server error", error: error.message });
+	}
 }
 
 export const getRecommendatedProducts = async (req, res) => {
