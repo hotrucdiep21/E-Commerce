@@ -3,12 +3,12 @@ import { redis } from "../lib/redis.js";
 import Product from "../model/product.model.js";
 export const getAllProducts = async (req, res) => {
     try {
-		const products = await Product.find({}); // find all products
-		res.json({ products });
-	} catch (error) {
-		console.log("Error in getAllProducts controller", error.message);
-		res.status(500).json({ message: "Server error", error: error.message });
-	}
+        const products = await Product.find({}); // find all products
+        res.json({ products });
+    } catch (error) {
+        console.log("Error in getAllProducts controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
 }
 
 export const getFeaturedProducts = async (req, res) => {
@@ -39,7 +39,7 @@ export const getFeaturedProducts = async (req, res) => {
 export const createProduct = async (req, res) => {
     try {
         const { name, description, price, image, category } = req.body;
-        console.log("Product controller:",name, description, price, image, category);
+        console.log("Product controller:", name, description, price, image, category);
 
         let cloudinaryResponse = null;
 
@@ -67,44 +67,46 @@ export const createProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try {
-		const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id);
 
-		if (!product) {
-			return res.status(404).json({ message: "Product not found" });
-		}
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
 
-		if (product.image) {
-			const publicId = product.image.split("/").pop().split(".")[0];
-			try {
-				await cloudinary.uploader.destroy(`products/${publicId}`);
-				console.log("deleted image from cloduinary");
-			} catch (error) {
-				console.log("error deleting image from cloduinary", error);
-			}
-		}
+        if (product.image) {
+            const publicId = product.image.split("/").pop().split(".")[0];
+            try {
+                await cloudinary.uploader.destroy(`products/${publicId}`);
+                console.log("deleted image from cloduinary");
+            } catch (error) {
+                console.log("error deleting image from cloduinary", error);
+            }
+        }
 
-		await Product.findByIdAndDelete(req.params.id);
+        await Product.findByIdAndDelete(req.params.id);
 
-		res.json({ message: "Product deleted successfully" });
-	} catch (error) {
-		console.log("Error in deleteProduct controller", error.message);
-		res.status(500).json({ message: "Server error", error: error.message });
-	}
+        res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+        console.log("Error in deleteProduct controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
 }
 
 export const getRecommendatedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
-            $sample({
-                size: 4
-            }),
             {
-                _id: 1,
-                name: 1,
-                description: 1,
-                price: 1,
-                image: 1
-            }
+                $sample: { size: 4 },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    description: 1,
+                    image: 1,
+                    price: 1,
+                },
+            },
         ])
 
         res.json({ products });

@@ -4,6 +4,7 @@ import axios from "../lib/axios.js";
 
 export const useProductStore = create((set, get) => ({
     products: [],
+    recomendedProducts: [],
     loading: false,
 
     setProducts: (products) => set({ products }),
@@ -40,7 +41,6 @@ export const useProductStore = create((set, get) => ({
         try {
             const response = await axios.get(`/products/category/${categoryId}`);
             set({ products: response.data.products, loading: false });
-            toast.success("Category fetched successfully");
         } catch (error) {
             console.log(error);
             set({ loading: false });
@@ -50,7 +50,6 @@ export const useProductStore = create((set, get) => ({
     deleteProduct: async (productId) => { 
         set({ loading: true });
 		try {
-            console.log("productId: ", productId);
 			await axios.delete(`/products/${productId}`);
 			set((prevProducts) => ({
 				products: prevProducts.products.filter((product) => product._id !== productId),
@@ -76,6 +75,15 @@ export const useProductStore = create((set, get) => ({
         } catch (error) {
             set({ loading: false });
             toast.error(error.response.data.error || "Failed to update product");
+        }
+    },
+
+    fetchFeaturedProducts: async () => {
+        try {
+            const reacomendedProducts = await axios.get("/products/recomendations");
+            set({ recomendedProducts: reacomendedProducts.data.products });
+        } catch (error) {
+            console.log(error);
         }
     }
 }))

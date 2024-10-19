@@ -13,7 +13,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email, password);
     login(email, password);
   }
   return (
@@ -49,7 +48,7 @@ const LoginPage = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className=' block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
+                  className=' block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 text-white
 									rounded-md shadow-sm
 									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 
 									 focus:border-emerald-500 sm:text-sm'
@@ -72,7 +71,7 @@ const LoginPage = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className=' block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
+                  className='text-white block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
 									rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
                   placeholder='••••••••'
                 />

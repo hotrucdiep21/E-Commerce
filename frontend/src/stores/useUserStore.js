@@ -41,7 +41,7 @@ export const useUserStore = create((set) => ({
                 email,
                 password,
             })
-            console.log("user: ", res.data.user);
+            
             set({ user: res.data.user, loading: false });
             toast.success("Logged in successfully");
         } catch (error) {
