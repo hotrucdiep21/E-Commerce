@@ -10,14 +10,14 @@ Welcome to the E-Commerce Website project! This web application provides a platf
 - **Product Catalog**: A comprehensive list of products with categories and search functionality.
 - **Shopping Cart**: Users can add items to their cart, view their selections, and proceed to checkout.
 - **Order Management**: Users can view their order history and track order status.
-- - **Payment**: User can payment.
+- **Payment**: User can payment.
 - **Responsive Design**: The application is optimized for both desktop and mobile devices, ensuring a user-friendly experience.
 
 ### Technologies Used
 
-- **Frontend**: React, HTML, CSS, JavaScript
-- **Backend**: Node.js, Express
-- **Database**: MongoDB
+- **Frontend**: React, HTML, Tailwind, JavaScript
+- **Backend**: Node.js, Express, cloundinary, mailtrap
+- **Database**: MongoDB, redis
 - **Payment Processing**: Paypal, Stripe, VN-PAY
 ### Getting Started
 
