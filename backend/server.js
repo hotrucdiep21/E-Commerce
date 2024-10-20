@@ -21,7 +21,7 @@ app.use(express.json({limit: "10mb"})) //allow json data to be sent to the serve
 app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/coupon", couponRoutes);
+app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyricsRoutes);
 
