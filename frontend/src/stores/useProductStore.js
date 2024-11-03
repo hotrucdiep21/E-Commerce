@@ -5,6 +5,7 @@ import axios from "../lib/axios.js";
 export const useProductStore = create((set, get) => ({
     products: [],
     recomendedProducts: [],
+    fetchFeaturedProducts_Home: [],
     loading: false,
 
     setProducts: (products) => set({ products }),
@@ -85,5 +86,17 @@ export const useProductStore = create((set, get) => ({
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+
+    fetchFeaturedProducts_HomePage: async () => {
+        try {
+            set({loading: true})
+            const response = await axios.get("/products/featured");
+            set({products: response.data, loading: false})
+
+        } catch (error) {
+          set({error: "Failed to fetch products", loading: false})
+          console.log({error: "Failed to fetch products", loading: false})  
+        }
+    } 
 }))
