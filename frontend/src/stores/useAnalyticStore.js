@@ -15,8 +15,6 @@ export const useAnalyticStore = create((set) => ({
         set({ isLoading: true });
         try {
             const response = await axios.get("/analytics");
-
-            console.log(response.data);
             set({
                 analyticsData: response.data.exAnalyticsData,
                 dailySalesData: response.data.exDailySalesData,

@@ -5,9 +5,6 @@ import { useEffect } from "react";
 
 const ProductsList = () => {
   const { deleteProduct, products, toggleFeaturedProduct } = useProductStore();
-
-  console.log("products", products);
-
   return (
     <motion.div
       className='bg-gray-800 shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto'
