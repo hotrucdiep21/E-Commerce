@@ -1,5 +1,8 @@
 <h1 align="center">E-Commerce Store 🛒</h1>
 
+![Uploading image.png…]()
+
+
 
 ## Introduction
 
