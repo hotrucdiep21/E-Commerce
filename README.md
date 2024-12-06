@@ -4,8 +4,8 @@
 
 Welcome to the E-Commerce Website project! This web application provides a platform for users to browse, search, and purchase a wide variety of products online. It aims to offer a seamless shopping experience with features such as user authentication, product listings, shopping cart management, and secure payment processing.
 
-Link project
-[https://fashion-shopp.onrender.com/]
+Link project : 
+https://fashion-shopp.onrender.com/
 ### Key Features
 -   🗄️ MongoDB & Redis Integration
 -   💳 Stripe Payment Setup
