@@ -1,5 +1,6 @@
 <h1 align="center">E-Commerce Store 🛒</h1>
-[Deploy](https://fashion-shopp.onrender.com/)
+## Deploy
+[https://fashion-shopp.onrender.com/]
 ```shell
 https://fashion-shopp.onrender.com/
 ```
