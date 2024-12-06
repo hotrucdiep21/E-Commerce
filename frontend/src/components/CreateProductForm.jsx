@@ -6,7 +6,7 @@ import { useProductStore } from "../stores/useProductStore";
 
 
 const categories = ["jeans", "t-shirts", "shoes", "glasses", "jackets", "suits", "bags"];
-const CreateproductForm = () => {
+const CreateProductForm = () => {
     const { createProduct, loading } = useProductStore();
     const [newProduct, setNewProduct] = useState({
         name: "",
@@ -163,4 +163,4 @@ const CreateproductForm = () => {
     )
 }
 
-export default CreateproductForm
+export default CreateProductForm

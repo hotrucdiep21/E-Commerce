@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
 import { motion } from "framer-motion";
 
-import CreateProductForm from '../components/CreateproductForm.jsx'
+import CreateProductForm from '../components/CreateProductForm.jsx'
 import ProductsList from '../components/ProductsList.jsx'
 import AnalyticsTab from '../components/AnalyticsTab.jsx'
 import { useProductStore } from '../stores/useProductStore.js'
