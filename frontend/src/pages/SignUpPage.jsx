@@ -20,7 +20,7 @@ const SignUpPage = () => {
     signup(formData.name, formData.email, formData.password, formData.confirmPassword);
   }
   return (
-    <div className='flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
+    <div className='flex flex-col justify-center py-12 sm:px-6 lg:px-8 text-c'>
       <motion.div
         className='sm:mx-auto sm:w-full sm:max-w-md'
         initial={{ opacity: 0, y: -20 }}
@@ -53,15 +53,15 @@ const SignUpPage = () => {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className='block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm
+                  className='text-white block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 rounded-md shadow-sm
 									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
-                  placeholder='Ho Truc Diep'
+                  placeholder='Username'
                 />
               </div>
             </div>
             {/* Email */}
             <div>
-              <label htmlFor='email' className='block text-sm font-medium text-gray-300'>
+              <label htmlFor='email' className='block text-sm font-medium text-gray-300' placeholder="Email">
                 Email address
               </label>
               <div className='mt-1 relative rounded-md shadow-sm'>
@@ -77,7 +77,7 @@ const SignUpPage = () => {
                   className=' block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
 									rounded-md shadow-sm
 									 placeholder-gray-400 focus:outline-none focus:ring-emerald-500 
-									 focus:border-emerald-500 sm:text-sm'
+									 focus:border-emerald-500 sm:text-sm text-white'
                   placeholder='you@example.com'
                 />
               </div>
@@ -97,7 +97,7 @@ const SignUpPage = () => {
                   required
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className=' block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
+                  className=' text-white block w-full px-3 py-2 pl-10 bg-gray-700 border border-gray-600 
 									rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
                   placeholder='••••••••'
                 />

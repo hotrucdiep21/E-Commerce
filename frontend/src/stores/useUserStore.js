@@ -35,7 +35,7 @@ export const useUserStore = create((set) => ({
             if (!email && !password) {
                 return toast.error("Please enter email and password");
             }
-
+            console.log(email, "appp")
             const res = await axios.post('/auth/login', {
                 email,
                 password,
