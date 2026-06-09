@@ -2,6 +2,7 @@ import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
 	const { user, logout } = useUserStore();
@@ -13,8 +14,10 @@ const Navbar = () => {
 			<div className='container mx-auto px-4 py-3'>
 				<div className='flex flex-wrap justify-between items-center'>
 					<Link to='/' className='text-2xl font-bold text-emerald-400 items-center space-x-2 flex'>
-						Fashion-Shop
+						DS.shop
 					</Link>
+
+					<SearchBar />
 
 					<nav className='flex flex-wrap items-center gap-4'>
 						<Link
