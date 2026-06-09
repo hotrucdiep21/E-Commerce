@@ -27,7 +27,7 @@ export const getFeaturedProducts = async (req, res) => {
             return res.status(404).json({ message: "Featured products not found" });
         }
         //stored in the redis for quick access
-        await redis.set("featuredProducts", JSON.stringify(featuredProducts), { EX: 60 * 60 });
+        await redis.set("featured_products", JSON.stringify(featuredProducts), "EX", 3600);
         res.status(200).json(featuredProducts);
 
     } catch (error) {
@@ -155,5 +155,60 @@ async function updateFeaturedProductsCache() {
         await redis.set("featured_products", JSON.stringify(featuredProducts));
     } catch (error) {
         console.log("Error updating featured products cache ", error.message);
+    }
+}
+
+export const searchProducts = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q) {
+            return res.status(400).json({ message: "Query parameter 'q' is required" });
+        }
+
+        const products = await Product.find({
+            $or: [
+                { name: { $regex: q, $options: "i" } },
+                { description: { $regex: q, $options: "i" } }
+            ]
+        }).lean();
+
+        res.json({ products });
+    } catch (error) {
+        console.log("Error in searchProducts controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+export const autocompleteProducts = async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.trim() === "") {
+            return res.json([]);
+        }
+
+        const products = await Product.find({
+            name: { $regex: q, $options: "i" }
+        })
+        .select("name image category price")
+        .limit(8)
+        .lean();
+
+        res.json(products);
+    } catch (error) {
+        console.log("Error in autocompleteProducts controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+export const getProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.json({ product });
+    } catch (error) {
+        console.log("Error in getProductById controller", error.message);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 }
