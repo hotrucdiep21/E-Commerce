@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage.jsx'
 import PurchaseSuccessPage from './pages/PurchaseSuccessPage.jsx'
 import PurchaseCancelPage from './pages/PurchaseCancelPage.jsx'
 import ProductDetailPage from './pages/ProductDetailPage.jsx'
+import ChatWidget from './components/ChatWidget.jsx'
 
 import { Toaster } from 'react-hot-toast'
 import { useUserStore } from './stores/useUserStore.js'
@@ -53,6 +54,7 @@ function App() {
           <Route path="/purchase-success" element={user ? <PurchaseSuccessPage /> : <Navigate to="/login" />} />
           <Route path="/purchase-cancel" element={user ? <PurchaseCancelPage /> : <Navigate to="/login" />} />
         </Routes>
+        <ChatWidget />
         <Toaster />
       </div>
     </div>
