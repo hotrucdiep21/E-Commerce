@@ -18,7 +18,6 @@ export const storeRefreshTokenToRedis = async (user_id, refreshToken) => {
 
 export const setCookie = (res, accessToken, refreshToken) => {
 
-    console.log("res----", res);
     res.cookie("accessToken", accessToken, {
         httpOnly: true, // Chỉ cho phép truy cập cookie qua HTTP, bảo vệ chống XSS.
         secure: process.env.NODE_ENV === "production", //Chỉ gửi cookie qua HTTPS khi ứng dụng đang chạy trong môi trường production.
