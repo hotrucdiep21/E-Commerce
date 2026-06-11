@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useProductStore } from '../stores/useProductStore';
 import { useCartStore } from '../stores/useCartStore';
 import { useUserStore } from '../stores/useUserStore';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 
 const ProductDetailPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const { currentProduct, fetchProductById, loading } = useProductStore();
     const { addToCart } = useCartStore();
     const { user } = useUserStore();
@@ -22,6 +23,7 @@ const ProductDetailPage = () => {
     const handleAddToCart = () => {
         if (!user) {
             toast.error("Please login to add products to cart", { id: "login" });
+            navigate('/login');
             return;
         }
         addToCart(currentProduct);

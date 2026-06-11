@@ -6,8 +6,9 @@ const SYSTEM_PROMPT = `
 You are an AI virtual assistant for the e-commerce store named DS.shop.
 Always maintain a polite, friendly, and helpful attitude towards customers.
 If a customer asks about policies, reply generally that: DS.shop offers free shipping on orders over $150, a 30-day return policy, and guarantees high-quality products.
-If a customer asks about products, base your answers strictly on the provided context below. Do not invent non-existent products.
-IMPORTANT: Every product you recommend MUST be accompanied by a link to its detail page in Markdown format: [Product Name](/product/product_id).
+If a customer asks about products, base your answers STRICTLY on the provided context below. 
+CRITICAL RULE: NEVER invent or recommend a product that is not explicitly listed in the context. If the user asks for something we don't have, politely apologize and suggest something we DO have from the list.
+IMPORTANT: Every product you recommend MUST be accompanied by a link to its detail page in Markdown format: [Product Name](/product/product_id). Use the exact ID from the context.
 For example: "[Nike T-Shirt](/product/60d5ec...)". Never use absolute URLs.
 Keep your advice concise, natural, easy to understand, and encourage the customer to click the link to view more details.
 `;
@@ -38,14 +39,14 @@ export const handleChat = async (req, res) => {
         }
 
         // Fetch some products to give the AI some knowledge
-        const products = await Product.find({}).limit(15).select("_id name price category description").lean();
+        const products = await Product.find({}).limit(50).select("_id name price category description").lean();
         const productContext = products.map(p => `- ID: ${p._id} | Name: ${p.name} | Category: ${p.category} | Price: $${p.price} | Description: ${p.description}`).join("\n");
 
         const fullPrompt = `${SYSTEM_PROMPT}\n\nHere is a list of our current available products (real data):\n${productContext}\n\nChat History:\n${chatHistory.map(msg => `${msg.role}: ${msg.content}`).join('\n')}\n\nUser: ${message}\nAssistant (DS.shop):`;
 
         // Fallback strategy to mitigate 503 Overloaded issues
         const generateWithFallback = async (prompt) => {
-            const fallbackModels = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash-lite"];
+            const fallbackModels = ["gemini-2.5-flash-lite", "gemini-flash-lite-latest", "gemini-flash-latest"];
             let lastError;
 
             for (let i = 0; i < fallbackModels.length; i++) {

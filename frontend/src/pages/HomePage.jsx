@@ -5,7 +5,7 @@ import FeaturedProduct from '../components/FeaturedProduct'
 import { useUserStore } from "../stores/useUserStore"
 
 const categories = [
-  { href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
+  { href: "/pants", name: "Pants", imageUrl: "/pants.jpg" },
   { href: "/t-shirts", name: "T-shirts", imageUrl: "/tshirts.jpg" },
   { href: "/shoes", name: "Shoes", imageUrl: "/shoes.jpg" },
   { href: "/glasses", name: "Glasses", imageUrl: "/glasses.png" },
