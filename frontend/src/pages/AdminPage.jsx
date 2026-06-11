@@ -7,6 +7,7 @@ import CreateProductForm from '../components/CreateProductForm.jsx'
 import ProductsList from '../components/ProductsList.jsx'
 import AnalyticsTab from '../components/AnalyticsTab.jsx'
 import OrderManagementList from '../components/OrderManagementList.jsx'
+import UserManagementList from '../components/UserManagementList.jsx'
 import { useProductStore } from '../stores/useProductStore.js'
 
 const tabs = [
@@ -54,7 +55,7 @@ const AdminPage = () => {
                 {activeTab === "products" && <ProductsList />}
                 {activeTab === "orders" && <OrderManagementList />}
                 {activeTab === "analytics" && <AnalyticsTab />}
-                {activeTab === "users" && <div className="text-center text-gray-300 mt-10">User Management Coming Soon...</div>}
+                {activeTab === "users" && <UserManagementList />}
             </div>
         </div>
     )
