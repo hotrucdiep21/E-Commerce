@@ -23,10 +23,17 @@ const PurchaseSuccessPage = () => {
             }
         }
         const sessionId = new URLSearchParams(window.location.search).get("session_id");
+        const isCod = new URLSearchParams(window.location.search).get("cod");
+        
+        if (isCod === "true") {
+            setIsProcessing(false);
+            return;
+        }
+
         if (sessionId) {
             handleCheckoutSeccess(sessionId);
         } else {
-            setIsProcessing(true);
+            setIsProcessing(false);
             setError("Session ID not found");
         }
     }, [clearCart])

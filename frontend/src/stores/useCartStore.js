@@ -10,6 +10,11 @@ export const useCartStore = create((set, get) => ({
     subtotal: 0,
     isCouponApplied: false,
     isLoading: false,
+    shippingAddress: { address: "", phoneNumber: "", postalCode: "" },
+    paymentMethod: "Credit Card",
+
+    setShippingAddress: (addressData) => set({ shippingAddress: { ...get().shippingAddress, ...addressData } }),
+    setPaymentMethod: (method) => set({ paymentMethod: method }),
 
     getMyCoupon: async () => {
         try {

@@ -13,6 +13,7 @@ import couponRoutes from "./routes/coupon.route.js"
 import paymentRoutes from "./routes/payment.route.js"
 import analyricsRoutes from "./routes/analytics.route.js"
 import chatRoutes from "./routes/chat.route.js"
+import orderRoutes from "./routes/order.route.js"
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyricsRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/orders", orderRoutes);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "/frontend/dist")));

@@ -1,16 +1,19 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
+import { BarChart, PlusCircle, ShoppingBasket, Users, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 
 import CreateProductForm from '../components/CreateProductForm.jsx'
 import ProductsList from '../components/ProductsList.jsx'
 import AnalyticsTab from '../components/AnalyticsTab.jsx'
+import OrderManagementList from '../components/OrderManagementList.jsx'
 import { useProductStore } from '../stores/useProductStore.js'
 
 const tabs = [
     { id: "create", label: "Create Product", icon: PlusCircle },
     { id: "products", label: "Products", icon: ShoppingBasket },
+    { id: "users", label: "User Management", icon: Users },
+    { id: "orders", label: "Order Management", icon: ShoppingCart },
     { id: "analytics", label: "Analytics", icon: BarChart },
 ];
 
@@ -49,7 +52,9 @@ const AdminPage = () => {
                 </div>
                 {activeTab === "create" && <CreateProductForm />}
                 {activeTab === "products" && <ProductsList />}
+                {activeTab === "orders" && <OrderManagementList />}
                 {activeTab === "analytics" && <AnalyticsTab />}
+                {activeTab === "users" && <div className="text-center text-gray-300 mt-10">User Management Coming Soon...</div>}
             </div>
         </div>
     )
