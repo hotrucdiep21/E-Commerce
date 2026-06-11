@@ -33,6 +33,28 @@ const orderSchema = new mongoose.Schema({
     stripeSessionId: {
         type: String,
         unique: true
+    },
+    deliveryStatus: {
+        type: String,
+        enum: ["Pending", "Shipped", "Delivered"],
+        default: "Pending"
+    },
+    paymentStatus: {
+        type: String,
+        enum: ["Pending", "Paid", "Failed"],
+        default: "Pending"
+    },
+    paymentMethod: {
+        type: String,
+        default: "Credit Card"
+    },
+    shippingAddress: {
+        type: String,
+        required: false
+    },
+    phoneNumber: {
+        type: String,
+        required: false
     }
 }, { timestamps: true });
 

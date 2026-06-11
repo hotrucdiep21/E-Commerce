@@ -4,7 +4,7 @@ import { stripe } from "../lib/stripe.js";
 
 export const createCheckoutSession = async (req, res) => {
     try {
-        const { products, couponCode } = req.body;
+        const { products, couponCode, shippingAddress, phoneNumber } = req.body;
 
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ error: "Invalid or empty products array" });
@@ -53,6 +53,8 @@ export const createCheckoutSession = async (req, res) => {
             metadata: {
                 userId: req.user._id.toString(),
                 couponCode: couponCode || "",
+                shippingAddress: shippingAddress || "Not Provided",
+                phoneNumber: phoneNumber || "Not Provided",
                 products: JSON.stringify(
                     products.map((p) => ({
                         id: p._id,
@@ -102,6 +104,10 @@ export const checkoutSuccess = async (req, res) => {
                 })),
                 totalAmount: session.amount_total / 100, // convert from cents to dollars,
                 stripeSessionId: sessionId,
+                paymentStatus: "Paid",
+                paymentMethod: "Credit Card",
+                shippingAddress: session.metadata.shippingAddress || "Not Provided",
+                phoneNumber: session.metadata.phoneNumber || "Not Provided"
             });
 
             await newOrder.save();
@@ -115,6 +121,65 @@ export const checkoutSuccess = async (req, res) => {
     } catch (error) {
         console.error("Error processing successful checkout:", error.message);
         res.status(500).json({ message: "Error processing successful checkout", error: error.message });
+    }
+};
+
+export const checkoutCOD = async (req, res) => {
+    try {
+        const { products, couponCode, shippingAddress, phoneNumber } = req.body;
+
+        if (!Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({ error: "Invalid or empty products array" });
+        }
+
+        let totalAmount = 0;
+
+        products.forEach((product) => {
+            totalAmount += product.price * product.quantity;
+        });
+
+        let coupon = null;
+        if (couponCode) {
+            coupon = await Coupon.findOne({ code: couponCode, userId: req.user._id, isActive: true });
+            if (coupon) {
+                totalAmount -= (totalAmount * coupon.discountPercentage) / 100;
+                // Deactivate the coupon
+                coupon.isActive = false;
+                await coupon.save();
+            }
+        }
+
+        const newOrder = new Order({
+            user: req.user._id,
+            products: products.map((product) => ({
+                product: product._id,
+                quantity: product.quantity,
+                price: product.price,
+            })),
+            totalAmount: totalAmount,
+            stripeSessionId: "COD_" + Date.now().toString() + Math.random().toString(36).substring(7),
+            paymentStatus: "Pending",
+            paymentMethod: "Cash on Delivery",
+            deliveryStatus: "Pending",
+            shippingAddress: shippingAddress || "Not Provided",
+            phoneNumber: phoneNumber || "Not Provided"
+        });
+
+        await newOrder.save();
+
+        if (totalAmount >= 200) { // Assuming threshold is 200 dollars instead of 20000 cents
+            await createNewCoupon(req.user._id);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "COD Order created successfully.",
+            orderId: newOrder._id,
+        });
+
+    } catch (error) {
+        console.error("Error processing COD checkout:", error);
+        res.status(500).json({ message: "Error processing COD checkout", error: error.message });
     }
 };
 

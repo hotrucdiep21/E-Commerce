@@ -1,27 +1,57 @@
 import { motion } from "framer-motion";
 import { useCartStore } from "../stores/useCartStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MoveRight } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "../lib/axios";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const stripePromise = loadStripe(
 	"pk_test_51Q7VbV00FPNMpCUov23Q8TuiP2hNTQWfqR3YV7sZRC3DrsfsVtq2kfCYSHpKSgeapOx5LKrYM8Dlt1LvtPEN49SS00H6BRWlE2"
 );
 
 const OrderSummary = () => {
-	const { total, subtotal, coupon, isCouponApplied, cart } = useCartStore();
+	const navigate = useNavigate();
+	const { total, subtotal, coupon, isCouponApplied, cart, shippingAddress, paymentMethod, clearCart } = useCartStore();
 	const savings = subtotal - total;
 	const formattedSubtotal = subtotal.toFixed(2);
 	const formattedTotal = total.toFixed(2);
 	const formattedSavings = savings.toFixed(2);
 
 	const handlePayment = async () => {
+		if (!shippingAddress.address || !shippingAddress.phoneNumber || !shippingAddress.postalCode) {
+			toast.error("Please fill in all shipping address fields.");
+			return;
+		}
+
+		const formattedAddress = `${shippingAddress.address}, Phone: ${shippingAddress.phoneNumber}, Postal: ${shippingAddress.postalCode}`;
+
+		if (paymentMethod === "Cash on Delivery") {
+			try {
+				const res = await axios.post("/payments/checkout-cod", {
+					products: cart,
+					couponCode: coupon ? coupon.code : null,
+					shippingAddress: formattedAddress,
+					phoneNumber: shippingAddress.phoneNumber
+				});
+				if (res.data.success) {
+					clearCart();
+					navigate("/purchase-success?cod=true");
+				}
+			} catch (error) {
+				console.error("COD Checkout Error:", error);
+				toast.error("Error processing COD order.");
+			}
+			return;
+		}
+
 		const stripe = await stripePromise;
 		const res = await axios.post("/payments/create-checkout-session", {
 			products: cart,
 			couponCode: coupon ? coupon.code : null,
+			shippingAddress: formattedAddress,
+			phoneNumber: shippingAddress.phoneNumber
 		});
 
 		const session = res.data;
@@ -33,6 +63,7 @@ const OrderSummary = () => {
 
 		if (result.error) {
 			console.error("Error:", result.error);
+			toast.error("Stripe Checkout Error.");
 		}
 	};
 

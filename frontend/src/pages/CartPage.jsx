@@ -7,6 +7,7 @@ import CartItem from "../components/CartItem";
 import PeopleAlsoBought from "../components/PeopleAlsoBought";
 import OrderSummary from "../components/OrderSummary";
 import GiftCouponCard from "../components/GiftCouponCard";
+import CheckoutDetails from "../components/CheckoutDetails";
 
 const CartPage = () => {
   const { cart } = useCartStore();
@@ -25,6 +26,7 @@ const CartPage = () => {
                 <CartItem key={item._id} item={item} />
               ))}
             </div>)}
+            {cart.length > 0 && <CheckoutDetails />}
             {cart.length > 0 && <PeopleAlsoBought />}
           </motion.div>
           {cart.length > 0 && (
