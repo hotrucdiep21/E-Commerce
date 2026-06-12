@@ -55,6 +55,10 @@ const orderSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: false
+    },
+    location: {
+        lat: { type: Number, required: false },
+        lng: { type: Number, required: false }
     }
 }, { timestamps: true });
 
