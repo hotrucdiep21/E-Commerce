@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect } from 'react';
-import { BarChart, PlusCircle, ShoppingBasket, Users, ShoppingCart } from "lucide-react";
+import { BarChart, PlusCircle, ShoppingBasket, Users, ShoppingCart, Map } from "lucide-react";
 import { motion } from "framer-motion";
 
 import CreateProductForm from '../components/CreateProductForm.jsx'
@@ -8,6 +8,7 @@ import ProductsList from '../components/ProductsList.jsx'
 import AnalyticsTab from '../components/AnalyticsTab.jsx'
 import OrderManagementList from '../components/OrderManagementList.jsx'
 import UserManagementList from '../components/UserManagementList.jsx'
+import DeliveryMap from '../components/DeliveryMap.jsx'
 import { useProductStore } from '../stores/useProductStore.js'
 
 const tabs = [
@@ -15,6 +16,7 @@ const tabs = [
     { id: "products", label: "Products", icon: ShoppingBasket },
     { id: "users", label: "User Management", icon: Users },
     { id: "orders", label: "Order Management", icon: ShoppingCart },
+    { id: "delivery", label: "Delivery Routes", icon: Map },
     { id: "analytics", label: "Analytics", icon: BarChart },
 ];
 
@@ -51,11 +53,12 @@ const AdminPage = () => {
                         </button>
                     ))}
                 </div>
-                {activeTab === "create" && <CreateProductForm />}
-                {activeTab === "products" && <ProductsList />}
-                {activeTab === "orders" && <OrderManagementList />}
-                {activeTab === "analytics" && <AnalyticsTab />}
-                {activeTab === "users" && <UserManagementList />}
+                { activeTab === "create" && <CreateProductForm /> }
+                { activeTab === "products" && <ProductsList /> }
+                { activeTab === "orders" && <OrderManagementList /> }
+                { activeTab === "delivery" && <DeliveryMap /> }
+                { activeTab === "analytics" && <AnalyticsTab /> }
+                { activeTab === "users" && <UserManagementList /> }
             </div>
         </div>
     )

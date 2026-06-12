@@ -1,5 +1,7 @@
 import Coupon from "../model/coupon.model.js";
 import Order from "../model/order.model.js";
+import { geocodeAddress } from "../utils/geocoder.js";
+
 import { stripe } from "../lib/stripe.js";
 
 export const createCheckoutSession = async (req, res) => {
@@ -93,8 +95,14 @@ export const checkoutSuccess = async (req, res) => {
                 );
             }
 
-            // create a new Order
-            const products = JSON.parse(session.metadata.products);
+            // Default to warehouse if geocoding fails
+            const defaultLocation = { lat: 10.762622, lng: 106.660172 };
+            const address = session.metadata.shippingAddress || "Not Provided";
+            let location = await geocodeAddress(address);
+            if (!location) {
+                location = defaultLocation;
+            }
+
             const newOrder = new Order({
                 user: session.metadata.userId,
                 products: products.map((product) => ({
@@ -106,8 +114,9 @@ export const checkoutSuccess = async (req, res) => {
                 stripeSessionId: sessionId,
                 paymentStatus: "Paid",
                 paymentMethod: "Credit Card",
-                shippingAddress: session.metadata.shippingAddress || "Not Provided",
-                phoneNumber: session.metadata.phoneNumber || "Not Provided"
+                shippingAddress: address,
+                phoneNumber: session.metadata.phoneNumber || "Not Provided",
+                location: location
             });
 
             await newOrder.save();
@@ -149,6 +158,12 @@ export const checkoutCOD = async (req, res) => {
             }
         }
 
+        const address = shippingAddress || "Not Provided";
+        let location = await geocodeAddress(address);
+        if (!location) {
+            location = { lat: 10.762622, lng: 106.660172 }; // Default warehouse
+        }
+
         const newOrder = new Order({
             user: req.user._id,
             products: products.map((product) => ({
@@ -161,8 +176,9 @@ export const checkoutCOD = async (req, res) => {
             paymentStatus: "Pending",
             paymentMethod: "Cash on Delivery",
             deliveryStatus: "Pending",
-            shippingAddress: shippingAddress || "Not Provided",
-            phoneNumber: phoneNumber || "Not Provided"
+            shippingAddress: address,
+            phoneNumber: phoneNumber || "Not Provided",
+            location: location
         });
 
         await newOrder.save();
